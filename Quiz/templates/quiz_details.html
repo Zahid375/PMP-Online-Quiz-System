@@ -1,0 +1,247 @@
+{% extends "base.html" %} {% load static %} {% block style %}
+<style>
+  .quiz-container {
+    padding: 20px 10px;
+    background: white;
+    margin-bottom: 10px;
+    border-radius: 4px;
+  }
+
+  .quiz-box {
+    padding: 10px;
+    background-color: white;
+    border-radius: 4px;
+  }
+
+  .question {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #dedede;
+  }
+
+  .right-item {
+    display: flex;
+    gap: 4px;
+    justify-content: flex-end;
+  }
+
+  input#id_points {
+    width: 25px;
+  }
+
+  select#id_topic {
+    width: 45%;
+  }
+
+  input#id_feedback {
+    padding: 10px;
+    border: none;
+  }
+
+  .quiz-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0px;
+    border-top: 1px solid #dfdfdf;
+  }
+
+  .options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 10px;
+  }
+
+  .choice_text {
+    padding: 10px 20px;
+    border: 1px solid #5d5d5d;
+  }
+
+  .add-option {
+    padding: 10px;
+    margin-left: 23px;
+    background: #f9f9f9;
+    border-radius: 4px;
+    display: inline-block;
+    margin-bottom: 30px;
+    color: gray;
+    border: none;
+  }
+
+  .add-option:hover {
+    color: #2f41e2;
+    cursor: pointer;
+  }
+
+  .question-header div {
+    display: flex;
+    gap: 4px;
+    padding-bottom: 10px;
+  }
+
+  .list-options {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .list-options img {
+    max-width: 100%;
+    max-height: 185px;
+    object-fit: contain;
+    object-position: left;
+  }
+
+  .option-item {
+    display: flex;
+    gap: 8px;
+  }
+
+  .qustion-list {
+    background: white;
+    padding: 10px;
+    margin: 10px 0px;
+  }
+</style>
+{% endblock style %} {% block body %}
+<div class="container" style="margin: 10px 25%; padding: 15px; border-radius: 4px">
+  <div class="quiz-container">
+    <h2>{{quiz.name}}</h2>
+  </div>
+  <form method="POST" enctype="multipart/form-data">
+    <div style="display: flex; justify-content: end; margin-bottom: 4px;"> {{question.question_type}}</div>
+    <div class="quiz-box" style="background-color: white">
+
+      {% csrf_token %}
+      <div class="question">
+        <div class="input-container" style="width: 65%">
+          {{question.ques_text}}
+          <span class="input-massage">Please valid Data.</span>
+        </div>
+        <div class="right-item">{{question.points}} {{question.topic}}</div>
+      </div>
+      <div id="option-container">
+        {% for form in formset %}
+        <div class="options item">
+          <group>
+            <div class="left-column">
+
+              {{form.is_correct}} {{form.choice_text}}
+              {{form.choice_image}}
+
+
+            </div>
+          </group>
+          <div class="right-column">
+            <button type="button" style="color: black" class="btn remove-form-row" id="{{ formset.prefix }}">
+              &#x2715;
+            </button>
+          </div>
+        </div>
+        {% endfor %} {{ formset.management_form }}
+      </div>
+      <button type="button" id="{{ formset.prefix }}" class="btn add-option add-form-row">
+        Add Option
+      </button>
+      <div class="quiz-footer">
+        <div class="left-item">{{question.feedback}}</div>
+        <div class="right-item">
+          <input class="button" type="submit" value="Save" />
+        </div>
+      </div>
+  </form>
+</div>
+<!-- All qustion-list -->
+<div class="question-container">
+  {% for ques in allquestion %}
+  <div class="qustion-list">
+    <div class="question-header">
+      <div style="display: flex; justify-content: space-between">
+        <h3>Q {{forloop.counter}} - {{ques.ques_text}}</h3>
+        <a onclick="return confirm('Are sure to  delete?');"
+          href="{% url 'quizQuesDelete' slug=quiz.slug id=ques.id %}"><span style="color: red">Delete</span></a>
+      </div>
+      <div>
+        <p>Point: {{ques.points}}</p>
+        <p>Topic: {{ques.topic}}</p>
+      </div>
+    </div>
+    <div class="list-options">
+      {% for choice in ques.choices.all %}
+      {% if choice.is_correct %}
+      <div class="option-item">
+        <input type="{% if ques.question_type == 'multiple_choice' %}checkbox{% else %}radio{% endif %}"
+          name="question_{{ ques.id }}_choice" id="choice_{{choice.id}}" value="{{ choice.id }}" checked />
+        <label for="choice_{{choice.id}}">{{choice.choice_text}}</label>
+      </div>
+      {% if choice.choice_image %}
+      <img src="/media/{{choice.choice_image}}" alt="">
+      {% endif %}
+      {% else %}
+      <div class="option-item">
+        <input type="{% if ques.question_type == 'multiple_choice' %}checkbox{% else %}radio{% endif %}"
+          name="question_{{ ques.id }}_choice" id="choice_{{choice.id}}" value="{{ choice.id }}" disabled />
+        <label for="choice_{{choice.id}}">{{choice.choice_text}}</label>
+      </div>
+      {% if choice.choice_image %}
+      <img src="/media/{{choice.choice_image}}" alt="">
+      {% endif %}
+      {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+  {% endfor %}
+</div>
+</div>
+{% endblock body %} {% block script %}
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"
+  integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="{% static 'js/formset.js' %}"></script>
+
+<script>
+  const questionType = document.getElementById("id_question_type");
+  const radios = document.querySelectorAll('.checkbox');
+  questionType.addEventListener("change", function () {
+    const textFiled = document.querySelectorAll('.choice_text');
+    const is_correct = document.querySelectorAll('.checkbox');
+
+    if (questionType.value == "image") {
+      textFiled.forEach((element, i) => {
+        element.style.display = "none";
+      });
+    }
+    else if (questionType.value == "single_choice") {
+      textFiled.forEach((element, i) => {
+        element.style.display = "inline-block";
+      });
+
+      is_correct.forEach((element, i) => {
+        element.setAttribute('type', 'radio');
+      });
+
+
+
+    }
+    else {
+      textFiled.forEach((element, i) => {
+        element.style.display = "inline-block";
+      });
+      is_correct.forEach((element, i) => {
+        element.setAttribute('type', 'checkbox');
+      });
+    }
+  });
+  radios.forEach((radio) => {
+    radio.addEventListener('click', function () {
+      // When a radio button is clicked, unselect all other radio buttons
+      radios.forEach((otherRadio) => {
+        if (otherRadio !== radio) {
+          otherRadio.checked = false;
+        }
+      });
+    });
+  });
+
+</script>
+{% endblock script %}

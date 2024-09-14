@@ -1,0 +1,86 @@
+#myVideo {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  min-width: 100%;
+  min-height: 100%;
+}
+.container {
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+}
+.button {
+  padding: 14px 16px;
+}
+.login-container {
+  display: flex;
+  min-width: 400px;
+  padding: 34px 25px 18px 25px;
+  border-radius: 8px;
+  background: var(--white, #fff);
+  flex-direction: column;
+  gap: 32px;
+  flex-shrink: 0;
+}
+.image-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.divider {
+  width: 100%;
+  height: 1px;
+  background: var(--outline, #e6e6e6);
+}
+.social-login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 23px;
+}
+.social-button {
+  display: flex;
+  padding: 13px 24px;
+  border-radius: 4px;
+  background: var(--outline, #e6e6e6);
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+.social-button:hover {
+  background: var(--outline, #e2e1e1);
+}
+.login-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  align-self: stretch;
+}
+.left-item {
+  display: flex;
+  padding: 4px 9px;
+  border-radius: 50px;
+  align-items: flex-start;
+  gap: 10px;
+}
+.right-item {
+  display: flex;
+  border-radius: 50%;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+.Join-now-btn {
+  display: flex;
+  padding: 2px 4px;
+  border-radius: 50%;
+  align-items: flex-start;
+  gap: 10px;
+}

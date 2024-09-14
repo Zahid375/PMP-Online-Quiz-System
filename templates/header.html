@@ -1,0 +1,64 @@
+{% load static %}
+<div class="header">
+  <a class="left-side" href="/">
+    <img class="main-logo" alt="" src="{% static '/asset/mainlogo.png' %}" />
+  </a>
+  <div class="middle">
+    <!-- <input class="search-input-box" type="text" placeholder="Search here..." maxlength minlength /> -->
+  </div>
+  <div class="right-side">
+    {% if user.is_superuser %}
+    <a href="{% url 'createQuiz' %}" class="button">Create Quiz</a>
+    {% endif %}
+    <div class="header-icon">
+      <span class="material-symbols-rounded"> dark_mode </span>
+    </div>
+    <div class="header-icon">
+      <span class="material-symbols-rounded"> apps </span>
+    </div>
+    <div class="dropdownarea">
+      <div onclick="toggleDropdown()" class="dropbtn profile-image">
+        <img class="image-icon" alt=""
+          src="{% if user.profile_pic %} /media/{{user.profile_pic}} {% else %} {% static 'asset/placeholderuser.jpeg' %} {% endif %}" />
+      </div>
+      <!-- Dropdown menu -->
+      <div id="myDropdown" class="dropdown-content">
+        <div class="dropdown">
+          <div class="dropdown-box">
+            <div class="dropdown-user">
+              <div class="profile-image" style="width: 66px; height: 66px">
+                <img style="width: 66px; height: 66px" alt=""
+                  src="{% if user.profile_pic %} /media/{{user.profile_pic}} {% else %} {% static 'asset/placeholderuser.jpeg' %} {% endif %}" />
+              </div>
+              <div class="dropdown-user-text">
+                <h2>{{user.first_name|truncatechars:12}}</h2>
+                <p>{{user.email}}</p>
+              </div>
+            </div>
+            <a class="button button-light" href="#"> View Profile </a>
+          </div>
+          <div class="dropdown-menu">
+            <a class="dropdown-menu-item" href="#">
+              <span class="material-symbols-rounded"> settings </span>
+
+              <p>Setting</p>
+            </a>
+            <a class="dropdown-menu-item" href="#">
+              <span class="material-symbols-rounded"> key </span>
+
+              <p>Chang password</p>
+            </a>
+            <a class="dropdown-menu-item" href="#">
+              <span class="material-symbols-rounded"> qr_code </span>
+
+              <p>Show Barcode</p>
+            </a>
+          </div>
+          <a class="dropdown-logout" href="{% url 'account:logout' %}">
+            <p>Log out</p>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

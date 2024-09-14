@@ -1,0 +1,302 @@
+{% extends "base.html" %} {% load static %} {% block style %}
+{% block headlink %}
+<link rel="stylesheet" href="{% static '/css/nevigation.css' %}" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+  integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
+{% endblock %}
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    background: var(--body-background, #f3f2ef);
+  }
+
+
+  .list-options {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .list-options img {
+    max-width: 100%;
+    max-height: 185px;
+    object-fit: contain;
+    object-position: left;
+  }
+
+  .option-item p {
+    margin: 0px;
+  }
+
+  .option-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+  }
+
+  .qustion-list {
+    background: white;
+    padding: 10px;
+    margin: 10px 0px;
+  }
+
+  .timer {
+    padding: 15px 30px;
+    background-color: white;
+    border-radius: 8px;
+    margin: 0px 40px;
+    position: sticky;
+    top: 20px;
+  }
+
+  .qustion-list {
+    display: none !important;
+  }
+
+  .active {
+    display: flex !important;
+  }
+
+  #navLinks {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+  }
+
+  #navLinks a {
+    padding: 10px;
+    border: 1px solid gray;
+  }
+
+  #navLinks a.active {
+    background-color: rgb(131, 131, 131);
+    color: white;
+    border-bottom: 2px solid red;
+  }
+
+  #navLinks a.selected {
+    background-color: green;
+    color: white;
+  }
+</style>
+{% endblock style %} {% block body %}
+
+<div class="container">
+  <div class="card mt-3">
+    <div class="card-header text-primary-emphasis bg-primary-subtle">
+      <div class="d-flex justify-content-between">
+        <div>
+          <h5>Exam Name : {{quiz.name}}</h5>
+          <p class="m-0">Sudent Name : {{user.first_name}}</p>
+        </div>
+        <div>
+          Time Left : <b><span id="timer"></span></b>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <form id="quiz" method="post">
+        {% csrf_token %}
+        {% for ques in questions %}
+        <div class="row qustion-list" id="{{ques.id}}">
+          <div class="col-md-3">
+            <div class="card">
+              <div class="card-body">
+                <p>Quention no : <b>{{forloop.counter}}</b></p>
+                <p>Topic : <b>{{ques.topic}}</b></p>
+                <p>Points : <b>{{ques.points}}</b></p>
+                <p>Flag : <input type="checkbox" name="flag" id="flag"></p>
+                <p>Comment:</p>
+                <textarea class="form-control" name="question_{{ question.id }}_feedback" id="" cols="20"
+                  rows="2"></textarea>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-9 ">
+            <div class="list-options">
+              <h5>{{ques.ques_text}}</h5>
+              {% for choice in ques.choices.all %}
+              {% if choice.choice_image %}
+              <div class="option-item">
+                <input type="{% if ques.question_type == 'multiple_choice' %}checkbox{% else %}radio{% endif %}"
+                  name="question_{{ ques.id }}_choice" id="choice_{{choice.id}}" value="{{ choice.id }}" />
+                <label for="choice_{{choice.id}}">{{choice.choice_text}}</label>
+              </div>
+              <img src="/media/{{choice.choice_image}}" alt="">
+              {% else %}
+              <div class="option-item">
+                <input type="{% if ques.question_type == 'multiple_choice' %}checkbox{% else %}radio{% endif %}"
+                  name="question_{{ ques.id }}_choice" id="choice_{{choice.id}}" value="{{ choice.id }}" />
+                <label for="choice_{{choice.id}}">{{choice.choice_text}}</label>
+              </div>
+              {% endif %}
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </form>
+      <!-- navigation -->
+      <details style="margin-left: 20px; width: 23%;">
+        <summary>Navigation</summary>
+        <div class="card">
+          <div class="card-body">
+            <div id="navLinks">
+              {% for ques in questions %}
+              <a href="#" data-index="{{ques.id}}">{{forloop.counter}}</a>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </details>
+    </div>
+    <div class="card-footer">
+      <div class="d-flex justify-content-end gap-2">
+        <button id="prevButton" class="btn btn-outline-secondary d-flex align-items-center justify-content-center"><svg
+            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
+            <path
+              d="M9.78 12.78a.75.75 0 0 1-1.06 0L4.47 8.53a.75.75 0 0 1 0-1.06l4.25-4.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042L6.06 8l3.72 3.72a.75.75 0 0 1 0 1.06Z">
+            </path>
+          </svg> Previous</button>
+        <button id="nextButton" class="btn btn-outline-secondary d-flex align-items-center justify-content-center">Next
+          <svg xmlns="http://www.w3.org/2000/svg" class="text-primary" viewBox="0 0 12 12" width="16" height="16">
+            <path
+              d="M4.7 10c-.2 0-.4-.1-.5-.2-.3-.3-.3-.8 0-1.1L6.9 6 4.2 3.3c-.3-.3-.3-.8 0-1.1.3-.3.8-.3 1.1 0l3.3 3.2c.3.3.3.8 0 1.1L5.3 9.7c-.2.2-.4.3-.6.3Z">
+            </path>
+          </svg></button>
+        <button type="submit" id="submitBtn" class="btn btn-success">
+          Finis Exam
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock body %} {% block script %}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+<script>
+
+  const timerElement = document.getElementById("timer");
+
+  let timeLeftSeconds = {{ quiz.question.count }} * 60; // Initial time in seconds (5 minutes)
+  let timerInterval;
+
+  let submitButtonClicked = false;
+  let submitBtn = document.getElementById('submitBtn');
+  submitBtn.addEventListener('click', function () {
+    let isconfirm = confirm('Are you sure ?');
+    if (isconfirm) {
+      submitButtonClicked = true;
+      document.getElementById('quiz').submit();
+    } else {
+      return false;
+    }
+
+  });
+
+  window.addEventListener('beforeunload', function (e) {
+    if (timeLeftSeconds > 0 && !submitButtonClicked) {
+      e.preventDefault();
+      e.returnValue = '';
+      return "You're leaving the site.";
+    }
+  });
+
+
+  function updateTimer() {
+    console.log("timer");
+    const minutes = Math.floor(timeLeftSeconds / 60);
+    const seconds = timeLeftSeconds % 60;
+
+    timerElement.innerText = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`; if (timeLeftSeconds === 0) {
+      clearInterval(timerInterval); document.getElementById('quiz').submit();
+    } else { timeLeftSeconds--; }
+  }
+  window.addEventListener("load", function () {
+    timerInterval = setInterval(updateTimer, 1000); // Update timer every
+    second
+  });
+  // Add event listeners to Next and Previous links let currentDivIndex=0; 
+  let currentDivIndex = 0;
+  const divs = document.querySelectorAll(".qustion-list");
+  const prevButton = document.getElementById("prevButton");
+  const nextButton = document.getElementById("nextButton");
+  const navLinks = document.querySelectorAll('#navLinks a');
+  function showDiv(index) {
+    divs.forEach((div, i) => {
+      if (i === index) {
+        div.classList.add("active");
+      } else {
+        div.classList.remove("active");
+      }
+    });
+
+    // Disable/Enable Previous and Next buttons based on the currentDivIndex
+    prevButton.disabled = currentDivIndex === 0;
+    nextButton.disabled = currentDivIndex === divs.length - 1;
+    // Update the active class on navigation links
+    navLinks.forEach((link, i) => {
+      if (i === index) {
+        link.classList.add('active');
+      } else {
+        link.classList.remove('active');
+      }
+    });
+    changeColor();
+  }
+
+  function markLinkAsSelected(index) {
+    navLinks[index].classList.add('selected');
+  }
+
+  function changeColor() {
+    if (currentDivIndex === 0) {
+      prevButton.style.cursor = "not-allowed";
+    } else {
+      prevButton.style.cursor = "pointer";
+    }
+    if (currentDivIndex === divs.length - 1) {
+      nextButton.style.cursor = "not-allowed";
+    } else {
+      nextButton.style.cursor = "pointer";
+    }
+  }
+  prevButton.addEventListener("click", (e) => {
+    e.preventDefault();
+    currentDivIndex = (currentDivIndex - 1 + divs.length) % divs.length;
+    showDiv(currentDivIndex);
+
+
+  });
+
+  nextButton.addEventListener("click", (e) => {
+    e.preventDefault();
+    currentDivIndex = (currentDivIndex + 1) % divs.length;
+    showDiv(currentDivIndex);
+
+
+  });
+
+  // Initial button state
+  showDiv(currentDivIndex);
+
+
+  navLinks.forEach((link, index) => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      currentDivIndex = index;
+      showDiv(currentDivIndex);
+
+    });
+  });
+  // Add event listeners to radio buttons to mark the link as selected
+  const radioButtons = document.querySelectorAll('input[type="checkbox"],input[type="radio"]');
+  radioButtons.forEach((radio, index) => {
+    radio.addEventListener('change', () => {
+      markLinkAsSelected(currentDivIndex);
+    });
+  });
+</script>
+
+{% endblock script %}

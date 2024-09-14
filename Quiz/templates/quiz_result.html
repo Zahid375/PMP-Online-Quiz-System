@@ -1,0 +1,153 @@
+{% extends "base.html" %} {% load static %} {% block style %}
+<style>
+    .quiz-container {
+        padding: 20px 10px;
+        background: white;
+        margin-bottom: 10px;
+        border-radius: 4px;
+    }
+
+    .quiz-box {
+        padding: 10px;
+        background-color: white;
+        border-radius: 4px;
+    }
+
+    .question {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid #dedede;
+    }
+
+    .right-item {
+        display: flex;
+        gap: 4px;
+        justify-content: flex-end;
+    }
+
+    input#id_points {
+        width: 25px;
+    }
+
+    select#id_topic {
+        width: 45%;
+    }
+
+    input#id_feedback {
+        padding: 10px;
+        border: none;
+    }
+
+    .quiz-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 0px;
+        border-top: 1px solid #dfdfdf;
+    }
+
+    .options {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 10px;
+    }
+
+    .choice_text {
+        padding: 10px 20px;
+        border: 1px solid #5d5d5d;
+    }
+
+    .add-option {
+        padding: 10px;
+        margin-left: 23px;
+        background: #f9f9f9;
+        border-radius: 4px;
+        display: inline-block;
+        margin-bottom: 30px;
+        color: gray;
+        border: none;
+    }
+
+    .add-option:hover {
+        color: #2f41e2;
+        cursor: pointer;
+    }
+
+    .question-header div {
+        display: flex;
+        gap: 4px;
+        padding-bottom: 10px;
+    }
+
+    .list-options {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .option-item {
+        display: flex;
+        gap: 8px;
+        padding: 8px 8px;
+        border-radius: 8px;
+        margin: 5px 0px;
+    }
+
+    .qustion-list {
+        background: white;
+        padding: 10px;
+        margin: 10px 0px;
+    }
+
+    .box {
+        display: flex;
+        justify-content: space-around;
+        flex-direction: row;
+        gap: 30px;
+        margin: 27px 0px;
+    }
+
+    .box-item {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background: beige;
+        padding: 15px;
+        border-radius: 8px;
+        width: 100%;
+    }
+</style>
+{% endblock style %} {% block body %}
+<div class="container" style="margin: 10px 25%; padding: 15px; border-radius: 4px">
+    <div class="quiz-container">
+        <h1>Quiz Result - {{ quiz.name }}</h1>
+        <div class="box">
+            <div class="box-item" style="background-color: rgb(165 224 165);">
+                <h1>{{ total_correct }}/{{quiz.question.count}}</h1>
+                <p>Correct</p>
+            </div>
+            <div class="box-item" style="background-color: rgb(232 140 140);">
+                <h1>{{ total_wrong }}</h1>
+                <p>Wrong</p>
+            </div>
+            <div class="box-item" style="background-color: rgb(182 184 251);">
+                <h1>{{ score }}</h1>
+                <p>Score</p>
+            </div>
+            <div class="box-item" style="background-color: rgb(227, 206, 240)">
+                <h1>{{ unanswered_questions.count }}</h1>
+                <p>Unanswer</p>
+            </div>
+        </div>
+        </p>
+    </div>
+    <!-- All qustion[-list -->
+    <div class="question-container">
+        <div class="qustion-list">
+            <h3>Please check your mail to see more details.</h3>
+        </div>
+
+    </div>
+    {% endblock %}

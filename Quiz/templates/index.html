@@ -1,0 +1,60 @@
+{% extends "base.html" %} {% block style%}
+<style>
+  .all-quiz {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    margin: 50px 50px;
+    grid-column-gap: 20px;
+    grid-row-gap: 40px;
+  }
+</style>
+{% endblock %} {% block body %} {% load static%} {% load custom_filters %}
+<div class="all-quiz">
+  {% if quiz %}
+  {% for quiz in quiz %}
+  <div class="card">
+    <div class="card-body">
+      <img width="100%" height="140px" style="border-radius: 8px; object-fit: cover" alt="" loading="lazy"
+        src="{% static 'asset/card-image.jpg'%}" />
+      <h2>{{quiz.name}}</h2>
+    </div>
+    <div class="card-footer">
+      <div class="user-action-count">
+        <div class="like-dislike-count">
+          <span>{{quiz.question.count}} Question</span>
+          <span>•</span>
+          <span>{{quiz.question.count|mul:1}} points</span>
+        </div>
+        <div class="like-dislike-count">
+          <span>Time: {{quiz.question.count|toTime:75}}</span>
+          <span>•</span>
+          <span>last date</span>
+        </div>
+      </div>
+      <div class="user-action">
+        <a class="button button-light" href="{% url 'overview' quiz.slug %}">
+          overview
+        </a>
+        {% if user.is_superuser %}
+        <a class="button button-light" href="{% url 'quizParticipant' quiz.slug %}">
+          Participant
+        </a>
+        <a class="button" href="{% url 'quizDetails' quiz.slug %}"> Edit </a>
+        {% else %}
+        <a class="button" onclick="return confirm('Are You sure ?');" href="{% url 'exam' quiz.slug %}">
+          Take exam
+        </a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+
+  {% empty %}
+  <h1>No Data Found</h1>
+  {% endfor %}
+  {% else %}
+  <h1>No Data Found</h1>
+  {% endif %}
+</div>
+{% endblock body %}

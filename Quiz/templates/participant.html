@@ -1,0 +1,107 @@
+{% extends "base.html" %} {% load static %} {% block style %}
+{% load custom_filters %}
+<style>
+  .quiz-container {
+    padding: 20px 15px;
+    background: white;
+    margin-bottom: 10px;
+    border-radius: 4px;
+  }
+
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 5px;
+  }
+
+  .table tr {
+    border-bottom: 1px solid #ebe9f1;
+  }
+
+  .table th {
+    font-family: inter;
+    font-size: 14px;
+    padding-bottom: 4px;
+  }
+
+  .table td {
+    padding: 10px 5px;
+  }
+
+  .box {
+    display: flex;
+    justify-content: space-around;
+    flex-direction: row;
+    gap: 30px;
+    margin: 27px 0px;
+  }
+
+  .box-item {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: beige;
+    padding: 15px;
+    border-radius: 8px;
+    width: 100%;
+  }
+</style>
+{% endblock style %} {% block body %}
+<div class="container" style="margin: 10px 20%; padding: 15px; border-radius: 4px">
+  <div class="quiz-container">
+    <h1>{{ quiz.name }}</h1>
+    <p>{{quiz.description}}</p>
+    <div class="box">
+      <div class="box-item">
+        <h1>{{quiz.question.count}}</h1>
+        <p>Total Question</p>
+      </div>
+      <div class="box-item">
+        <h1>{{ points }}</h1>
+        <p>Points</p>
+      </div>
+      <div class="box-item">
+        <h1>{{quiz.question.count|toTime:75}}</h1>
+        <p>Time</p>
+      </div>
+    </div>
+    <h2>All Participant</h2>
+    {% if user_results %}
+    <table class="table">
+      <thead>
+        <tr>
+          <th align="left">#</th>
+          <th align="left">image</th>
+          <th align="left">Name</th>
+          <th>correct</th>
+          <th>Wrong</th>
+          <th>Score</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for result in user_results %}
+        <tr>
+          <td>1</td>
+          <td>
+            <img
+              src="{% if result.user__profile_pic %} /media/{{result.user__profile_pic}} {% else %} {% static 'asset/placeholderuser.jpeg' %} {% endif %}"
+              width="24px" height="24px" style="border-radius: 50%" alt="userimage" />
+          </td>
+          <td>
+            <p>{{result.user__first_name}} {{result.user__last_name}}</p>
+            <span>{{result.user__email}}</span>
+          </td>
+          <td align="center">{{ result.correct_answers }}</td>
+          <td align="center">{{result.wrong_answers}}</td>
+          <td align="center">{{result.score}}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <h3 align="center" style="padding: 50px 0px">No data Found</h3>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

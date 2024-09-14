@@ -1,0 +1,42 @@
+{% extends "base.html" %} {% block body %}
+<div
+  class="container"
+  style="
+    margin: 10px 25%;
+    background-color: white;
+    padding: 15px;
+    border-radius: 4px;
+  "
+>
+  <div class="quiz-b0x">
+    <h2>Create Quiz</h2>
+    <form action="{% url 'createQuiz' %} " method="POST">
+      {% csrf_token %}
+      <div class="input-container">
+        <input
+          class="input-box"
+          type="text"
+          name="quiz_name"
+          id="quiz_name"
+          placeholder="Quiz name"
+          required
+        />
+        <span class="input-massage">Please valid Data.</span>
+      </div>
+      <div class="input-container">
+        <textarea
+          class="input-box"
+          name="quiz_description"
+          placeholder="quiz description"
+          id="quiz_description"
+          cols="30"
+          rows="5"
+        ></textarea>
+        <span class="input-massage">Please valid Data.</span>
+      </div>
+
+      <input class="button button-full" type="submit" value="Create" />
+    </form>
+  </div>
+</div>
+{% endblock body %}

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+{% load static %}
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1, width=device-width" />
+    {% block headlink%}
+    <link rel="stylesheet" href="{% static '/css/nevigation.css' %}" />
+    <link rel="stylesheet" href="{% static '/css/global.css' %}" />
+    {% endblock %}
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" />
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    {% block style %} {% endblock style %}
+    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/toastr.css' %}" media="all">
+    <script type="text/javascript" src="{% static 'js/toastr.js' %}"></script>
+</head>
+
+<body>
+    {% include "header.html" %}
+    {% if messages %}
+    {% for message in messages %}
+    <script type=text/javascript>
+    toastr.options = {
+        "closeButton": true,
+        "debug": false,
+        "newestOnTop": false,
+        "progressBar": false,
+        "positionClass": "toast-bottom-left",
+        "preventDuplicates": false,
+        "onclick": null,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "5000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+    }
+
+    toastr.{{ message.tags }}('{{ message }}')
+    </script>
+    {% endfor %}
+    {% endif %}
+    {% block body %} {% endblock body %}
+
+    {% block script %} {% endblock script %}
+    <script>
+        function toggleDropdown() {
+            var dropdown = document.getElementById("myDropdown");
+            dropdown.classList.toggle("show");
+        }
+
+        document.addEventListener("click", function (event) {
+            var targetElement = event.target; // Clicked element
+            var dropdown = document.getElementById("myDropdown");
+
+            var clickedInsideDropdown = dropdown.contains(targetElement);
+            var clickedInsideDropdownParent = targetElement.closest(".dropdownarea");
+
+            if (!clickedInsideDropdown && !clickedInsideDropdownParent) {
+                dropdown.classList.remove("show");
+            }
+        });
+    </script>
+</body>
+
+</html>

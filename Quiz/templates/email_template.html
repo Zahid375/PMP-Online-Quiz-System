@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            color: #000;
+            font-family: Inter;
+            font-size: 24px;
+            font-style: normal;
+            font-weight: 700;
+        }
+
+        p {
+            color: var(--secondary-text, #65676b);
+            font-family: Inter;
+            font-size: 14px;
+            font-style: normal;
+            font-weight: 400;
+            line-height: 20px;
+            text-decoration: none;
+            margin: 0px;
+        }
+
+        span {
+            color: var(--secondary-text, #65676b);
+            font-family: Inter;
+            font-size: 12px;
+            font-style: normal;
+            font-weight: 400;
+            line-height: normal;
+        }
+
+        .quiz-container {
+            margin: 20px 10%;
+            background: #ffffff;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            padding: 10px;
+        }
+
+        .quiz-box {
+            padding: 10px;
+            background-color: white;
+            border-radius: 4px;
+        }
+
+        .question {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #dedede;
+        }
+
+        .question-header div {
+            display: flex;
+            gap: 4px;
+            padding-bottom: 10px;
+        }
+
+        .option-item {
+            display: flex;
+            width: 97%;
+            padding: 8px 8px;
+            border-radius: 8px;
+            margin: 5px 0px;
+        }
+
+        .qustion-list {
+            background: white;
+            padding: 10px;
+            margin: 10px 0px;
+            border-bottom: 1px solid #ddd5d5;
+        }
+
+        .box {
+            display: flex;
+            justify-content: space-around;
+            flex-direction: row;
+            gap: 30px;
+            margin: 27px 0px;
+        }
+
+        .box-item {
+            justify-content: center;
+            align-items: center;
+            background: beige;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px;
+            width: 100%;
+        }
+
+        .question-container {
+            margin: 0% 10%;
+            padding: 10px;
+        }
+
+        @media only screen and (max-width: 1000px) {
+
+            /* For mobile phones: */
+            .question-container {
+                margin: 0% 1%;
+            }
+
+            .quiz-container {
+                margin: 0px 1%;
+            }
+
+            .container {
+                padding: 0px !important;
+            }
+
+            h1 {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container" style="padding: 15px; border-radius: 4px;background-color: #f3f2ef;">
+        <div class="quiz-container">
+            <h1>Quiz Result - {{ quiz.name }}</h1>
+            <div class="box" style="gap: 16px;">
+                <div class="box-item" style="background-color: rgb(165 224 165)">
+                    <h1>{{ total_correct }}/{{quiz.question.count}}</h1>
+                    <p>Correct</p>
+                </div>
+                <div class="box-item" style="background-color: rgb(232 140 140)">
+                    <h1>{{ total_wrong }}</h1>
+                    <p>Wrong</p>
+                </div>
+                <div class="box-item" style="background-color: rgb(182 184 251)">
+                    <h1>{{ score }}</h1>
+                    <p>Score</p>
+                </div>
+                <div class="box-item" style="background-color: rgb(227, 206, 240)">
+                    <h1>{{ unanswered_questions.count }}</h1>
+                    <p>Unanswer</p>
+                </div>
+            </div>
+            </p>
+        </div>
+        <!-- All qustion[-list -->
+        <div class="question-container">
+            {% for result in user_results %}
+            <div class="qustion-list">
+                <div class="question-header">
+                    <h3>Q {{forloop.counter}} - {{ result.question.ques_text }}</h3>
+                    <div>
+                        <span>Point: {{ result.question.points }} </span>
+                        {% if result.question.topic %}
+                        <span> • Topic: {{ result.question.topic }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="list-options">
+                    {% for choice in result.question.choices.all %}
+                    {% if choice.is_correct %}
+                    <div class="option-item" style="background-color: rgb(68, 168, 68)">
+                        <input type="radio" />
+                        <p style="color: white">{{choice.choice_text}}</p>
+                    </div>
+                    {% elif result.user_choice.id == choice.id and not result.user_choice.is_correct%}
+                    <div class="option-item" style="background-color: rgb(231, 84, 84)">
+                        <input type="radio" checked disabled />
+                        <p style="color: white">{{choice.choice_text}}</p>
+                    </div>
+                    {% else %}
+                    <div class="option-item">
+                        <input type="radio" disabled />
+                        <p>{{choice.choice_text}}</p>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+
+            {% if unanswered_questions %}
+            <h3>UnAnswer Question</h3>
+            {% for question in unanswered_questions %}
+            <div class="qustion-list">
+                <div class="question-header">
+                    <h3>Q {{forloop.counter}} - {{ question.ques_text }}</h3>
+                    <div>
+                        <p>Point: {{ question.points }}</p>
+                        <p>Topic: {{ question.topic }}</p>
+                    </div>
+                </div>
+                <div class="list-options">
+                    {% for choice in question.choices.all %}
+                    {% if choice.is_correct %}
+                    <div class="option-item" style="background-color: rgb(68, 168, 68)">
+                        <input type="radio" />
+                        <p style="color: white">{{choice.choice_text}}</p>
+                    </div>
+                    {% else %}
+                    <div class="option-item">
+                        <input type="radio" disabled />
+                        <p>{{choice.choice_text}}</p>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+            {% endif %}
+        </div>
+
+    </div>
+</body>
+
+</html>

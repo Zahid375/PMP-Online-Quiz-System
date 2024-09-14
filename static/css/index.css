@@ -1,0 +1,44 @@
+.container {
+  position: relative;
+  padding: 24px;
+  display: flex;
+  justify-content: space-between;
+}
+
+/* middle column */
+.middle-column {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 13px;
+}
+
+/* right column */
+.right-column {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 20%;
+}
+.suggesion {
+  display: flex;
+  height: 218px;
+  flex-direction: column;
+}
+.contact-people {
+  display: flex;
+  height: 495px;
+  border-radius: 4px;
+  background: rgba(230, 230, 230, 0);
+  flex-direction: column;
+}
+.contact-container {
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+.contact-container::-webkit-scrollbar {
+  display: none;
+}
+.hover:hover {
+  background-color: var(--outline, #e6e6e6);
+}

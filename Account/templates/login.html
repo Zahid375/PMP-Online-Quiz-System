@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Edulink | Stay Connected to the Learning Universe</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" />
+  <link rel="stylesheet" href="{% static 'css/global.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/login.css' %}" />
+</head>
+
+<body>
+  <video style="background-color: #f3f2ef" autoplay muted loop id="myVideo">
+    <source src="" type="video/mp4" />
+    Your browser does not support HTML5 video.
+  </video>
+
+  <div class="container">
+    <div class="login-container">
+      <div class="image-container">
+        <img width="200px" src="{% static './asset/mainlogo.png' %}" alt="Edulink logo" />
+        <p style="padding-top: 10px">
+          Stay Connected to the Learning Universe
+        </p>
+      </div>
+
+      <form method="POST">
+        {% csrf_token %}
+        <div class="input-container">
+          <input class="input-box" type="email" name="email" id="email" placeholder="Enter your email" />
+          <span class="input-massage">Please valid Data.</span>
+        </div>
+        <div class="input-container">
+          <input class="input-box" type="password" name="password" id="password" placeholder="Enter your password" />
+          <span class="input-massage">Please valid Data.</span>
+        </div>
+        <input type="submit" value="LOG IN" style="width: 100%" class="button" />
+      </form>
+      <div class="divider"></div>
+      <div class="social-login">
+        <a href="/social" class="social-button">
+          <svg xmlns="http://www.w3.org/2000/svg" width="21" height="20" viewBox="0 0 21 20" fill="none">
+            <path
+              d="M18.6713 8.36791H18.0001V8.33332H10.5001V11.6667H15.2097C14.5226 13.6071 12.6763 15 10.5001 15C7.73883 15 5.50008 12.7612 5.50008 9.99999C5.50008 7.23874 7.73883 4.99999 10.5001 4.99999C11.7747 4.99999 12.9342 5.48082 13.8172 6.26624L16.1742 3.90916C14.6859 2.52207 12.6951 1.66666 10.5001 1.66666C5.898 1.66666 2.16675 5.39791 2.16675 9.99999C2.16675 14.6021 5.898 18.3333 10.5001 18.3333C15.1022 18.3333 18.8334 14.6021 18.8334 9.99999C18.8334 9.44124 18.7759 8.89582 18.6713 8.36791Z"
+              fill="#FFC107" />
+            <path
+              d="M3.12744 6.12124L5.86536 8.12916C6.60619 6.29499 8.40036 4.99999 10.4999 4.99999C11.7745 4.99999 12.9341 5.48082 13.817 6.26624L16.1741 3.90916C14.6858 2.52207 12.6949 1.66666 10.4999 1.66666C7.29911 1.66666 4.52327 3.47374 3.12744 6.12124Z"
+              fill="#FF3D00" />
+            <path
+              d="M10.5 18.3333C12.6525 18.3333 14.6084 17.5096 16.0871 16.17L13.508 13.9875C12.6713 14.6212 11.6313 15 10.5 15C8.33255 15 6.49213 13.6179 5.7988 11.6892L3.0813 13.7829C4.46047 16.4817 7.2613 18.3333 10.5 18.3333Z"
+              fill="#4CAF50" />
+            <path
+              d="M18.6712 8.36791H18V8.33333H10.5V11.6667H15.2096C14.8796 12.5987 14.28 13.4025 13.5067 13.9879L13.5079 13.9871L16.0871 16.1696C15.9046 16.3354 18.8333 14.1667 18.8333 9.99999C18.8333 9.44124 18.7758 8.89583 18.6712 8.36791Z"
+              fill="#1976D2" />
+          </svg>
+          <p>Google</p>
+        </a>
+        <a href="/social" class="social-button">
+          <svg xmlns="http://www.w3.org/2000/svg" width="21" height="20" viewBox="0 0 21 20" fill="none">
+            <path
+              d="M10.4999 2.08333C8.40029 2.08333 6.38665 2.9174 4.90199 4.40207C3.41733 5.88673 2.58325 7.90036 2.58325 9.99999C2.58325 12.0996 3.41733 14.1133 4.90199 15.5979C6.38665 17.0826 8.40029 17.9167 10.4999 17.9167C12.5995 17.9167 14.6132 17.0826 16.0978 15.5979C17.5825 14.1133 18.4166 12.0996 18.4166 9.99999C18.4166 7.90036 17.5825 5.88673 16.0978 4.40207C14.6132 2.9174 12.5995 2.08333 10.4999 2.08333Z"
+              fill="#039BE5" />
+            <path
+              d="M11.5718 12.0983H13.6205L13.9422 10.0171H11.5713V8.87959C11.5713 8.01501 11.8538 7.24834 12.6626 7.24834H13.9622V5.43209C13.7338 5.40126 13.2509 5.33376 12.3384 5.33376C10.433 5.33376 9.31593 6.34001 9.31593 8.63251V10.0171H7.35718V12.0983H9.31593V17.8188C9.70384 17.8771 10.0968 17.9167 10.5001 17.9167C10.8647 17.9167 11.2205 17.8833 11.5718 17.8358V12.0983Z"
+              fill="white" />
+          </svg>
+          <p>Facebook</p>
+        </a>
+      </div>
+      <div class="login-footer">
+        <div class="left-item">
+          <a href="#">
+            <p>Forgot Password?</p>
+          </a>
+        </div>
+        <div class="right-item">
+          <p>New to Edulink?</p>
+          <a href="{% url 'account:signup'%}" class="Join-now-btn">Join now</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
